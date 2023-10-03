@@ -19,3 +19,11 @@ void checkersPiece::setAlive(bool isAlive) {
 char checkersPiece::getColour() {
     return this->colour;
 }
+
+int checkersPiece::getRow() {
+    return this->row;
+}
+
+int checkersPiece::getColumn() {
+    return this->column;
+}

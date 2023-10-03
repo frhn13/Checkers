@@ -10,5 +10,7 @@ class checkersPiece {
         void setColour(char type);
         void setAlive(bool isAlive);
         char getColour();
+        int getRow();
+        int getColumn();
     
 };
