@@ -24,8 +24,8 @@ int main() {
     char turn = 'r';
     bool turn_valid;
     do {
-        displayGameBoard(board);
         do {
+            displayGameBoard(board);
             turn == 'r' ? std::cout << "RED TURN\n" : std::cout << "BLACK TURN\n";
             std::cout << "Enter the x coordinate of the piece you want to move: ";
             std::cin >> x_orig;
@@ -46,5 +46,6 @@ int main() {
                 std::cout << "Piece selected is not valid, please try again.\n\n";
         } while(turn_valid == false);
         turn == 'r' ? turn = 'b' : turn = 'r'; 
-    } while (board.getRed() > 0 || board.getBlack() > 0);
+    } while (board.getRed() > 0 && board.getBlack() > 0);
+    std::cout << "Game Over";
 }
