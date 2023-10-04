@@ -14,5 +14,6 @@ class CheckersBoard {
         void decreaseRed();
         void decreaseBlack();
         checkersPiece findPiece(int row, int column);
-        void movePiece(checkersPiece piece, int new_row, int new_column);
+        bool checkPiece(int row, int column, char turn);
+        bool movePiece(checkersPiece piece, int new_row, int new_column);
 };

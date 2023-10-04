@@ -37,6 +37,14 @@ std::vector<std::vector<checkersPiece>> CheckersBoard::getBoard() {
     return this->board;
 }
 
+int CheckersBoard::getRed() {
+    return this->no_red;
+}
+
+int CheckersBoard::getBlack() {
+    return this->no_black;
+}
+
 void CheckersBoard::decreaseRed() {
     this->no_red--;
 }
@@ -49,7 +57,11 @@ checkersPiece CheckersBoard::findPiece(int row, int column) {
     return this->board[row][column];
 }
 
-void CheckersBoard::movePiece(checkersPiece piece, int new_row, int new_column) {
+bool CheckersBoard::checkPiece(int row, int column, char turn) {
+    return this->board[row][column].getColour() == turn ? true : false;
+}
+
+bool CheckersBoard::movePiece(checkersPiece piece, int new_row, int new_column) {
     checkersPiece moved_to_piece = CheckersBoard::findPiece(new_row, new_column);
     if (piece.getColour() == 'r') {
         if (piece.getRow()+1 == new_row && (piece.getColumn()+1 == new_column || piece.getColumn()-1 == new_column) && moved_to_piece.getColour() == 'n') {
@@ -57,6 +69,7 @@ void CheckersBoard::movePiece(checkersPiece piece, int new_row, int new_column) 
             moved_to_piece.setColour('r');
             this->board[piece.getRow()][piece.getColumn()] = piece;
             this->board[new_row][new_column] = moved_to_piece;
+            return true;
         }
     }
     else if (piece.getColour() == 'b') {
@@ -66,6 +79,8 @@ void CheckersBoard::movePiece(checkersPiece piece, int new_row, int new_column) 
             moved_to_piece.setColour('b');
             this->board[piece.getRow()][piece.getColumn()] = piece;
             this->board[new_row][new_column] = moved_to_piece;
+            return true;
         }
     }
+    return false;
 }
