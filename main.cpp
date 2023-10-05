@@ -14,6 +14,7 @@ To-do
 */
 
 void displayGameBoard(CheckersBoard board) {
+    std::cout << "|\n-------------------------------------\n";
     for (int x=0; x <= board.getBoard().size(); x++) {
         if (x < board.getBoard().size())
             std::cout << "| " << x+1 << " ";
@@ -32,6 +33,7 @@ void displayGameBoard(CheckersBoard board) {
 int main() {
     bool play_game = true;
     bool turn_valid;
+    std::string orig_coordinates, new_coordinates;
     int x_orig, y_orig, x_new, y_new;
     std::string play_again;
     do {

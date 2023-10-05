@@ -24,7 +24,7 @@ std::vector<std::vector<checkersPiece>> CheckersBoard::createBoard() {
                 piece.setAlive(true);
             }
             else {
-                piece.setColour('n');
+                piece.setColour(' ');
                 piece.setAlive(false);   
             }
             game_board[x].push_back(piece);
@@ -64,29 +64,29 @@ bool CheckersBoard::checkPiece(int row, int column, char turn) {
 bool CheckersBoard::movePiece(checkersPiece piece, int new_row, int new_column) {
     checkersPiece moved_to_piece = CheckersBoard::findPiece(new_row, new_column);
     if (piece.getColour() == 'r') {
-        if (piece.getRow()+1 == new_row && (piece.getColumn()+1 == new_column || piece.getColumn()-1 == new_column) && moved_to_piece.getColour() == 'n') {
-            piece.setColour('n');
+        if (piece.getRow()+1 == new_row && (piece.getColumn()+1 == new_column || piece.getColumn()-1 == new_column) && moved_to_piece.getColour() == ' ') {
+            piece.setColour(' ');
             moved_to_piece.setColour('r');
             this->board[piece.getRow()][piece.getColumn()] = piece;
             this->board[new_row][new_column] = moved_to_piece;
             return true;
         }
-        else if (moved_to_piece.getColour() == 'n' && piece.getRow()+2 == new_row && piece.getColumn()+2 == new_column && this->board[new_row-1][new_column-1].getColour() == 'b') {
+        else if (moved_to_piece.getColour() == ' ' && piece.getRow()+2 == new_row && piece.getColumn()+2 == new_column && this->board[new_row-1][new_column-1].getColour() == 'b') {
             checkersPiece destroyed_piece = CheckersBoard::findPiece(new_row-1, new_column-1);
-            piece.setColour('n');
+            piece.setColour(' ');
             moved_to_piece.setColour('r');
-            destroyed_piece.setColour('n');
+            destroyed_piece.setColour(' ');
             this->board[piece.getRow()][piece.getColumn()] = piece;
             this->board[new_row][new_column] = moved_to_piece;
             this->board[new_row-1][new_column-1] = destroyed_piece;
             this->no_black--;
             return true;
         }
-        else if (moved_to_piece.getColour() == 'n' && piece.getRow()+2 == new_row && piece.getColumn()-2 == new_column && this->board[new_row-1][new_column+1].getColour() == 'b') {
+        else if (moved_to_piece.getColour() == ' ' && piece.getRow()+2 == new_row && piece.getColumn()-2 == new_column && this->board[new_row-1][new_column+1].getColour() == 'b') {
             checkersPiece destroyed_piece = CheckersBoard::findPiece(new_row-1, new_column+1);
-            piece.setColour('n');
+            piece.setColour(' ');
             moved_to_piece.setColour('r');
-            destroyed_piece.setColour('n');
+            destroyed_piece.setColour(' ');
             this->board[piece.getRow()][piece.getColumn()] = piece;
             this->board[new_row][new_column] = moved_to_piece;
             this->board[new_row-1][new_column+1] = destroyed_piece;
@@ -96,29 +96,29 @@ bool CheckersBoard::movePiece(checkersPiece piece, int new_row, int new_column) 
     }
 
     else if (piece.getColour() == 'b') {
-        if (piece.getRow()-1 == new_row && (piece.getColumn()+1 == new_column || piece.getColumn()-1 == new_column) && moved_to_piece.getColour() == 'n') {
-            piece.setColour('n');
+        if (piece.getRow()-1 == new_row && (piece.getColumn()+1 == new_column || piece.getColumn()-1 == new_column) && moved_to_piece.getColour() == ' ') {
+            piece.setColour(' ');
             moved_to_piece.setColour('b');
             this->board[piece.getRow()][piece.getColumn()] = piece;
             this->board[new_row][new_column] = moved_to_piece;
             return true;
         }
-        else if (moved_to_piece.getColour() == 'n' && piece.getRow()-2 == new_row && piece.getColumn()+2 == new_column && this->board[new_row+1][new_column-1].getColour() == 'r') {
+        else if (moved_to_piece.getColour() == ' ' && piece.getRow()-2 == new_row && piece.getColumn()+2 == new_column && this->board[new_row+1][new_column-1].getColour() == 'r') {
             checkersPiece destroyed_piece = CheckersBoard::findPiece(new_row+1, new_column-1);
-            piece.setColour('n');
+            piece.setColour(' ');
             moved_to_piece.setColour('b');
-            destroyed_piece.setColour('n');
+            destroyed_piece.setColour(' ');
             this->board[piece.getRow()][piece.getColumn()] = piece;
             this->board[new_row][new_column] = moved_to_piece;
             this->board[new_row+1][new_column-1] = destroyed_piece;
             this->no_red--;
             return true;
         }
-        else if (moved_to_piece.getColour() == 'n' && piece.getRow()-2 == new_row && piece.getColumn()-2 == new_column && this->board[new_row+1][new_column+1].getColour() == 'r') {
+        else if (moved_to_piece.getColour() == ' ' && piece.getRow()-2 == new_row && piece.getColumn()-2 == new_column && this->board[new_row+1][new_column+1].getColour() == 'r') {
             checkersPiece destroyed_piece = CheckersBoard::findPiece(new_row+1, new_column+1);
-            piece.setColour('n');
+            piece.setColour(' ');
             moved_to_piece.setColour('b');
-            destroyed_piece.setColour('n');
+            destroyed_piece.setColour(' ');
             this->board[piece.getRow()][piece.getColumn()] = piece;
             this->board[new_row][new_column] = moved_to_piece;
             this->board[new_row+1][new_column+1] = destroyed_piece;
