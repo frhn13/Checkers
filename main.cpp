@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <cstring>
+#include <string>
 #include "board.hpp"
 
 /*
@@ -13,6 +14,23 @@ To-do
 6) Write scores to file
 */
 
+bool coordinate_validation(std::string orig_coordinates, std::string new_coordinates) {
+    if (orig_coordinates.length() != 3 || new_coordinates.length() != 3) {
+        std::cout << "length";
+        return false;
+    }
+    if (!isdigit(orig_coordinates[0]) || !isdigit(orig_coordinates[2]) || !isdigit(new_coordinates[0]) || !isdigit(new_coordinates[2])) {
+        std::cout << "non-numeric";
+        return false;
+    }
+    if (int(orig_coordinates[0] - 48) < 1 || int(orig_coordinates[0] - 48) > 8 || int(orig_coordinates[2] - 48) < 1 || int(orig_coordinates[2] - 48) > 8 
+    || int(new_coordinates[0] - 48) < 1 || int(new_coordinates[0] - 48) > 8 || int(new_coordinates[2] - 48) < 1 || int(new_coordinates[2] - 48) > 8) {
+        std::cout << "what";
+        return false;
+    }
+    return true;
+}
+
 void displayGameBoard(CheckersBoard board) {
     std::cout << "|\n-------------------------------------\n";
     for (int x=0; x <= board.getBoard().size(); x++) {
@@ -22,7 +40,10 @@ void displayGameBoard(CheckersBoard board) {
             std::cout << "| " << "  ";
         for (int y=0; y < board.getBoard()[0].size(); y++) {
             if (x < board.getBoard()[0].size())
-                std::cout << "| " << board.getBoard()[x][y].getColour() << " ";
+                if (board.getBoard()[x][y].getKing())
+                    std::cout << "| " << toupper(board.getBoard()[x][y].getColour()) << " ";
+                else
+                    std::cout << "| " << board.getBoard()[x][y].getColour() << " ";
             else
                 std::cout << "| " << y+1 << " ";
         }
@@ -43,24 +64,27 @@ int main() {
             do {
                 displayGameBoard(board);
                 turn == 'r' ? std::cout << "RED TURN\n" : std::cout << "BLACK TURN\n";
-                std::cout << "Enter the x coordinate of the piece you want to move: ";
-                std::cin >> x_orig;
-                std::cout << "Enter the y coordinate of the piece you want to move: ";
-                std::cin >> y_orig;
-                std::cout << "Enter the x coordinate of where you want to move the piece to: ";
-                std::cin >> x_new;
-                std::cout << "Enter the y coordinate of where you want to move the piece to: ";
-                std::cin >> y_new;
-                turn_valid = board.checkPiece(x_orig-1, y_orig-1, turn);
-                if (turn_valid) {
-                    checkersPiece piece = board.findPiece(x_orig-1, y_orig-1);
-                    turn_valid = board.movePiece(piece, x_new-1, y_new-1);
-                    if (!turn_valid)
-                        std::cout << "Move made is invalid, please try again.\n\n";
+                std::cout << "Enter the coordinates of the piece you want to move in the form a,b: ";
+                std::cin >> orig_coordinates;
+                std::cout << "Enter the coordinates of where you want to move the piece to in the form a,b: ";
+                std::cin >> new_coordinates;
+                turn_valid = coordinate_validation(orig_coordinates, new_coordinates);
+                if (!turn_valid) {
+                    std::cout << "Some of the coordinates entered are invalid, please try again.\n\n";
                 }
-                else
-                    std::cout << "Piece selected is not valid, please try again.\n\n";
+                else {
+                    turn_valid = board.checkPiece(int(orig_coordinates[0] - 48)-1, int(orig_coordinates[2] - 48)-1, turn);
+                    if (turn_valid) {
+                        checkersPiece piece = board.findPiece(int(orig_coordinates[0] - 48)-1, int(orig_coordinates[2] - 48)-1);
+                        turn_valid = board.movePiece(piece, int(new_coordinates[0] - 48)-1, int(new_coordinates[2] - 48)-1);
+                        if (!turn_valid)
+                            std::cout << "Move made is invalid, please try again.\n\n";
+                    }
+                    else
+                        std::cout << "Piece selected is not valid, please try again.\n\n";
+                }
             } while(turn_valid == false);
+            board.checkForKing();
             turn == 'r' ? turn = 'b' : turn = 'r'; 
         } while (board.getRed() > 0 && board.getBlack() > 0);
 

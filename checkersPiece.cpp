@@ -16,6 +16,10 @@ void checkersPiece::setAlive(bool isAlive) {
     this->is_alive = isAlive;
 }
 
+void checkersPiece::setKing(bool is_king) {
+    this->is_king = is_king;
+}
+
 char checkersPiece::getColour() {
     return this->colour;
 }
@@ -26,4 +30,8 @@ int checkersPiece::getRow() {
 
 int checkersPiece::getColumn() {
     return this->column;
+}
+
+bool checkersPiece::getKing() {
+    return this->is_king;
 }

@@ -128,3 +128,16 @@ bool CheckersBoard::movePiece(checkersPiece piece, int new_row, int new_column) 
     }
     return false;
 }
+
+void CheckersBoard::checkForKing() {
+    for (int y=0; y < 8; y++) {
+        if (this->board[7][y].getColour() == 'r' && !this->board[7][y].getKing()) {
+            checkersPiece king_piece = CheckersBoard::findPiece(7,y);
+            king_piece.setKing(true);
+        }
+        if (this->board[0][y].getColour() == 'b' && !this->board[0][y].getKing()) {
+            checkersPiece king_piece = CheckersBoard::findPiece(0,y);
+            king_piece.setKing(true);
+        }
+    }
+}
