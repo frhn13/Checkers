@@ -26,7 +26,7 @@ bool coordinate_validation(std::string orig_coordinates, std::string new_coordin
 }
 
 void displayGameBoard(CheckersBoard board) {
-    std::cout << "|\n-------------------------------------\n";
+    std::cout << "\n-------------------------------------\n";
     for (int x=0; x <= board.getBoard().size(); x++) {
         if (x < board.getBoard().size())
             std::cout << "| " << x+1 << " ";
@@ -88,6 +88,7 @@ int main() {
         else {
             std::cout << "Red has won!\n";
         }
+        displayGameBoard(board);
         std::cout << "Do you want to play again: ";
         std::cin >> play_again;
         play_again == "yes" || play_again == "y" ? play_game = true : play_game = false;
