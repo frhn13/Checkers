@@ -15,19 +15,13 @@ To-do
 */
 
 bool coordinate_validation(std::string orig_coordinates, std::string new_coordinates) {
-    if (orig_coordinates.length() != 3 || new_coordinates.length() != 3) {
-        std::cout << "length";
+    if (orig_coordinates.length() != 3 || new_coordinates.length() != 3)
         return false;
-    }
-    if (!isdigit(orig_coordinates[0]) || !isdigit(orig_coordinates[2]) || !isdigit(new_coordinates[0]) || !isdigit(new_coordinates[2])) {
-        std::cout << "non-numeric";
+    if (!isdigit(orig_coordinates[0]) || !isdigit(orig_coordinates[2]) || !isdigit(new_coordinates[0]) || !isdigit(new_coordinates[2]))
         return false;
-    }
     if (int(orig_coordinates[0] - 48) < 1 || int(orig_coordinates[0] - 48) > 8 || int(orig_coordinates[2] - 48) < 1 || int(orig_coordinates[2] - 48) > 8 
-    || int(new_coordinates[0] - 48) < 1 || int(new_coordinates[0] - 48) > 8 || int(new_coordinates[2] - 48) < 1 || int(new_coordinates[2] - 48) > 8) {
-        std::cout << "what";
+    || int(new_coordinates[0] - 48) < 1 || int(new_coordinates[0] - 48) > 8 || int(new_coordinates[2] - 48) < 1 || int(new_coordinates[2] - 48) > 8)
         return false;
-    }
     return true;
 }
 
@@ -41,7 +35,7 @@ void displayGameBoard(CheckersBoard board) {
         for (int y=0; y < board.getBoard()[0].size(); y++) {
             if (x < board.getBoard()[0].size())
                 if (board.getBoard()[x][y].getKing())
-                    std::cout << "| " << toupper(board.getBoard()[x][y].getColour()) << " ";
+                    std::cout << "| " << char(toupper(board.getBoard()[x][y].getColour())) << " ";
                 else
                     std::cout << "| " << board.getBoard()[x][y].getColour() << " ";
             else
