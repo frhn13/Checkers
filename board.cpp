@@ -61,11 +61,11 @@ bool CheckersBoard::checkPiece(int row, int column, char turn) {
     return this->board[row][column].getColour() == turn ? true : false;
 }
 
-bool CheckersBoard::movePiece(checkersPiece piece, int new_row, int new_column) {
+bool CheckersBoard::movePiece(checkersPiece piece, int new_row, int new_column, bool has_to_take) {
     checkersPiece moved_to_piece = CheckersBoard::findPiece(new_row, new_column);
     if (piece.getColour() == 'r') {
-        if ((piece.getRow()+1 == new_row && (piece.getColumn()+1 == new_column || piece.getColumn()-1 == new_column) && moved_to_piece.getColour() == ' ') ||
-        (piece.getKing() && piece.getRow()-1 == new_row && (piece.getColumn()+1 == new_column || piece.getColumn()-1 == new_column) && moved_to_piece.getColour() == ' ')) {
+        if (!has_to_take && ((piece.getRow()+1 == new_row && (piece.getColumn()+1 == new_column || piece.getColumn()-1 == new_column) && moved_to_piece.getColour() == ' ') ||
+        (piece.getKing() && piece.getRow()-1 == new_row && (piece.getColumn()+1 == new_column || piece.getColumn()-1 == new_column) && moved_to_piece.getColour() == ' '))) {
             finishMovement(piece, moved_to_piece, false, new_row, new_column, 'r', 0, 0);
             return true;
         }
@@ -89,8 +89,8 @@ bool CheckersBoard::movePiece(checkersPiece piece, int new_row, int new_column) 
     }
 
     else if (piece.getColour() == 'b') {
-        if (piece.getRow()-1 == new_row && (piece.getColumn()+1 == new_column || piece.getColumn()-1 == new_column) && moved_to_piece.getColour() == ' ' ||
-        (piece.getRow()+1 == new_row && (piece.getColumn()+1 == new_column || piece.getColumn()-1 == new_column) && moved_to_piece.getColour() == ' ')) {
+        if (!has_to_take && (piece.getRow()-1 == new_row && (piece.getColumn()+1 == new_column || piece.getColumn()-1 == new_column) && moved_to_piece.getColour() == ' ' ||
+        (piece.getRow()+1 == new_row && (piece.getColumn()+1 == new_column || piece.getColumn()-1 == new_column) && moved_to_piece.getColour() == ' '))) {
             finishMovement(piece, moved_to_piece, false, new_row, new_column, 'b', 0, 0);
             return true;
         }
@@ -126,7 +126,7 @@ void CheckersBoard::finishMovement(checkersPiece piece, checkersPiece moved_to_p
         this->board[piece.getRow()][piece.getColumn()] = piece;
         this->board[new_row][new_column] = moved_to_piece;
         this->board[destroyed_row][destroyed_column] = destroyed_piece;
-        piece_colour == 'r' ? this->no_black-- : this->no_red;
+        piece_colour == 'r' ? this->no_black-- : this->no_red--;
     }
     else {
         moved_to_piece.setColour(piece_colour);

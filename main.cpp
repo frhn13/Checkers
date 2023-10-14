@@ -50,10 +50,13 @@ int main() {
     bool turn_valid;
     std::string orig_coordinates, new_coordinates;
     int x_orig, y_orig, x_new, y_new;
+    std::string move_again;
     std::string play_again;
+    std::string new_orig_coordinates;
     do {
         CheckersBoard board;
         char turn = 'r';
+        int no_red = board.getRed(), no_black = board.getBlack();
         do {
             do {
                 displayGameBoard(board);
@@ -70,7 +73,7 @@ int main() {
                     turn_valid = board.checkPiece(int(orig_coordinates[0] - 48)-1, int(orig_coordinates[2] - 48)-1, turn);
                     if (turn_valid) {
                         checkersPiece piece = board.findPiece(int(orig_coordinates[0] - 48)-1, int(orig_coordinates[2] - 48)-1);
-                        turn_valid = board.movePiece(piece, int(new_coordinates[0] - 48)-1, int(new_coordinates[2] - 48)-1);
+                        turn_valid = board.movePiece(piece, int(new_coordinates[0] - 48)-1, int(new_coordinates[2] - 48)-1, false);
                         if (!turn_valid)
                             std::cout << "Move made is invalid, please try again.\n\n";
                     }
@@ -78,7 +81,40 @@ int main() {
                         std::cout << "Piece selected is not valid, please try again.\n\n";
                 }
             } while(turn_valid == false);
+            new_orig_coordinates = new_coordinates;
+            if (no_red > board.getRed() || no_black > board.getBlack()) {
+                do {
+                    displayGameBoard(board);
+                    std::cout << "Can you move that piece again, answer with Yes or No: ";
+                    std::cin >> move_again;
+                    if (move_again == "Yes" || move_again == "yes") {
+                        orig_coordinates = new_orig_coordinates;
+                        std::cout << "Enter the coordinates of where you want to move the piece to in the form a,b: ";
+                        std::cin >> new_coordinates;
+                        turn_valid = coordinate_validation(orig_coordinates, new_coordinates);
+                        if (!turn_valid) {
+                            std::cout << "Some of the coordinates entered are invalid, please try again.\n\n";
+                        }
+                        else {
+                            turn_valid = board.checkPiece(int(orig_coordinates[0] - 48)-1, int(orig_coordinates[2] - 48)-1, turn);
+                            if (turn_valid) {
+                                checkersPiece piece = board.findPiece(int(orig_coordinates[0] - 48)-1, int(orig_coordinates[2] - 48)-1);
+                                turn_valid = board.movePiece(piece, int(new_coordinates[0] - 48)-1, int(new_coordinates[2] - 48)-1, true);
+                                if (!turn_valid)
+                                    std::cout << "Move made is invalid, please try again.\n\n";
+                                else
+                                    new_orig_coordinates = new_coordinates;
+                            }
+                            else
+                                std::cout << "Piece selected is not valid, please try again.\n\n";
+                        }
+                    }
+                } while(move_again == "Yes" || move_again == "yes");
+            }
             board.checkForKing();
+            no_red = board.getRed();
+            no_black = board.getBlack();
+            std::cout << board.getRed() << " " << board.getBlack();
             turn == 'r' ? turn = 'b' : turn = 'r'; 
         } while (board.getRed() > 0 && board.getBlack() > 0);
 
