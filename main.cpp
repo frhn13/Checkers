@@ -2,17 +2,8 @@
 #include <vector>
 #include <cstring>
 #include <string>
+#include <fstream>
 #include "board.hpp"
-
-/*
-To-do
-1) Add ability to restart game upon completion
-2) Make game board look nicer 
-3) Add more input validation (Can't enter non-numbers etc) and improve piece movement input
-4) Add King functionality
-5) Add ability to take multiple pieces where possible
-6) Write scores to file
-*/
 
 bool coordinate_validation(std::string orig_coordinates, std::string new_coordinates) {
     if (orig_coordinates.length() != 3 || new_coordinates.length() != 3)
@@ -45,6 +36,26 @@ void displayGameBoard(CheckersBoard board) {
     }
 }
 
+void writeScoreToFile(std::string winner, int winner_pieces) {
+    std::ofstream scores;
+    scores.open("scores.txt", std::ios::app);
+    std::string score = winner + " won with " + std::to_string(winner_pieces) + " pieces left\n";
+    scores << score;
+    scores.close();
+}
+
+std::vector<std::string> readScoresFromFile() {
+    std::string score;
+    std::vector<std::string> scores;
+    std::ifstream scores_file("scores.txt");
+    if (scores_file.is_open()) {
+        while (std::getline(scores_file, score)) {
+            scores.push_back(score);
+        }
+    }
+    return scores;
+}
+
 int main() {
     bool play_game = true;
     bool turn_valid;
@@ -53,10 +64,24 @@ int main() {
     std::string move_again;
     std::string play_again;
     std::string new_orig_coordinates;
+    std::string previous_results;
     do {
         CheckersBoard board;
         char turn = 'r';
         int no_red = board.getRed(), no_black = board.getBlack();
+
+        std::cout << "Would you like to see the results from previous games of checkers, answer with yes or no: ";
+            std::cin >> previous_results;
+            if (strcasecmp(previous_results.c_str(), "yes") == 0) {
+                std::vector<std::string> scores_list = readScoresFromFile();
+                if (scores_list.size() == 0)
+                    std::cout << "No scores are present";
+                for (int x=0; x<scores_list.size(); x++) {
+                    std::cout << scores_list[x] << std::endl;
+                }
+                std::cout << std::endl;
+            }
+
         do {
             do {
                 displayGameBoard(board);
@@ -87,7 +112,7 @@ int main() {
                     displayGameBoard(board);
                     std::cout << "Can you move that piece again, answer with Yes or No: ";
                     std::cin >> move_again;
-                    if (move_again == "Yes" || move_again == "yes") {
+                    if (strcasecmp(move_again.c_str(), "yes") == 0) {
                         orig_coordinates = new_orig_coordinates;
                         std::cout << "Enter the coordinates of where you want to move the piece to in the form a,b: ";
                         std::cin >> new_coordinates;
@@ -109,25 +134,26 @@ int main() {
                                 std::cout << "Piece selected is not valid, please try again.\n\n";
                         }
                     }
-                } while(move_again == "Yes" || move_again == "yes");
+                } while(strcasecmp(move_again.c_str(), "yes") == 0);
             }
             board.checkForKing();
             no_red = board.getRed();
             no_black = board.getBlack();
-            std::cout << board.getRed() << " " << board.getBlack();
             turn == 'r' ? turn = 'b' : turn = 'r'; 
         } while (board.getRed() > 0 && board.getBlack() > 0);
 
         if (board.getRed() <= 0) {
             std::cout << "Black has won!\n";
+            writeScoreToFile("Black", board.getBlack());
         }
         else {
             std::cout << "Red has won!\n";
+            writeScoreToFile("Red", board.getRed());
         }
         displayGameBoard(board);
         std::cout << "Do you want to play again: ";
         std::cin >> play_again;
-        play_again == "yes" || play_again == "y" ? play_game = true : play_game = false;
+        strcasecmp(move_again.c_str(), "yes") == 0 || play_again == "y" ? play_game = true : play_game = false;
     } while (play_game);
     std::cout << "Game Over";
 }
